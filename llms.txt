@@ -1,0 +1,8 @@
+# carbon.thecreatology.com
+
+> Estimate the text-token, energy, carbon and water footprint of a super intelligent tools conversation with TheCreatology's private, browser-only Super Intelligent Tools Footprint Inspector.
+
+## Home
+
+- [TheCreatology · Carbon Footprint Inspector](https://carbon.thecreatology.com): Estimate the text-token, energy, carbon and water footprint of a super intelligent tools conversation with TheCreatology's private, browser-only Super Intelligent Tools Footprint Inspector.
+

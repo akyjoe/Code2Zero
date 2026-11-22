@@ -1,0 +1,25 @@
+{
+  "name": "code2zero-default-factors",
+  "version": "0.1.0",
+  "description": "Default environmental assumptions for Code2Zero — AI Footprint Inspector.",
+  "endpoint": "https://carbon.thecreatology.com/api/factors.json",
+  "factors": {
+    "charsPerToken": 4,
+    "whPerToken": 0.001,
+    "co2PerWh": 0.45,
+    "waterMlPerWh": 2.0
+  },
+  "methodology": {
+    "tokens": "Estimated via character heuristic: Math.ceil(chars / charsPerToken), default 4 chars per token.",
+    "electricity_wh": "tokens * whPerToken (watt-hours).",
+    "carbon_gco2e": "electricity_wh * co2PerWh (grams CO2e per watt-hour, grid average).",
+    "water_ml": "electricity_wh * waterMlPerWh (millilitres per watt-hour)."
+  },
+  "caveats": [
+    "Scenario-based estimation only — not provider measurements and not audited carbon accounting.",
+    "Token counts are heuristics, not exact tokenizer counts.",
+    "All calculations run client-side; no data is sent to any server."
+  ],
+  "source": "https://github.com/akyjoe/Code2Zero",
+  "article": "https://www.thecreatology.com/build-with-ai-carbon-footprint.html"
+}

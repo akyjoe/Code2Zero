@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Estimate the text-token, energy, carbon and water footprint of a super intelligent tools conversation with TheCreatology's private, browser-only Super Intelligent Tools Footprint Inspector.">
+<title>TheCreatology · Carbon Footprint Inspector</title>
+<link rel="stylesheet" href="style.css">
+<link rel="manifest" href="site.webmanifest">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/icons/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="assets/icons/favicon-16x16.png">
+<link rel="apple-touch-icon" href="assets/icons/icon-192.png">
+<meta name="theme-color" content="#0b5ed6">
+</head>
+<body>
+<main>
+<div class="sticky-top">
+  <header>
+    <div class="brand"><h1>Carbon Footprint <span>Inspector</span></h1><span class="version">v0.2</span></div>
+    <button class="gear" id="settingsToggle" type="button" aria-label="Open estimation settings" aria-expanded="false" aria-controls="settingsPanel">⚙️</button>
+  </header>
+  <section class="settings" id="settingsPanel" aria-labelledby="settingsTitle" hidden>
+    <h2 id="settingsTitle">Estimation settings</h2>
+    <label for="profile">Illustrative workload profile</label>
+    <select id="profile"><option value="0.25">Light text workload</option><option value="0.60" selected>General-purpose text workload</option><option value="1.20">Heavy reasoning / larger workload</option></select>
+    <div class="fields">
+      <div><label for="efficiency">Energy per 1K tokens (Wh)</label><input id="efficiency" type="number" min="0" step="0.01" value="0.60"></div>
+      <div><label for="grid">Grid carbon intensity (g CO₂e/kWh)</label><input id="grid" type="number" min="0" step="1" value="450"></div>
+      <div><label for="water">Water intensity (ml/kWh)</label><input id="water" type="number" min="0" step="1" value="500"></div>
+      <div><label for="pue">Data-centre PUE</label><input id="pue" type="number" min="1" step="0.01" value="1.30"></div>
+    </div>
+    <p class="hint">Editable scenario assumptions, not measurements or claims about a named AI company. Energy per 1K tokens is a simplified combined estimate for this prototype.</p>
+  </section>
+  <section class="results-bar" aria-label="Live estimated results">
+    <div class="results">
+      <div class="metric"><small>Estimated tokens</small><strong id="tokens" aria-live="polite">—</strong></div>
+      <div class="metric"><small>Estimated energy · Wh</small><strong id="energy">—</strong></div>
+      <div class="metric"><small>Estimated emissions · g CO₂e</small><strong id="carbon">—</strong></div>
+      <div class="metric"><small>Estimated water · ml</small><strong id="waterOut">—</strong></div>
+      <div class="metric"><small>Input / output split</small><span class="split-status" id="splitStatus">Not analysed</span></div>
+    </div>
+  </section>
+</div>
+
+<div class="layout">
+  <section class="panel input-panel" aria-labelledby="inputTitle">
+    <h2 id="inputTitle">Paste or type a super intelligent tools conversation</h2>
+    <textarea id="conversation" aria-label="AI conversation text" placeholder="Paste a conversation here…&#10;&#10;Optional role labels help separate input and output:&#10;User: Your prompt…&#10;Assistant: The super intelligent tools response…&#10;&#10;If no labels are found, the full text is counted as conversation text."></textarea>
+    <p class="hint">Token counts are rough estimates based on text length, not provider-reported counts. Remove personal or sensitive information before pasting.</p>
+    <div class="actions"><button class="secondary" id="clear" type="button">Clear</button><button class="secondary" id="download" type="button" disabled>Export estimate JSON</button></div>
+  </section>
+</div>
+
+<footer aria-labelledby="footerTitle">
+  <h2 id="footerTitle">About the Super Intelligent Tools Footprint Inspector</h2>
+  <div class="footer-grid">
+    <section><h3>How this estimate works</h3><p>TheCreatology Super Intelligent Tools Footprint Inspector estimates text volume with a simple character-based heuristic of roughly one token per four characters. When lines use role labels such as “User:” and “Assistant:”, it estimates input and output separately. The selected workload assumptions are applied to estimate electricity use, associated carbon dioxide equivalent emissions, and water use.</p></section>
+    <section><h3>Privacy and browser-only processing</h3><p>This is a client-only prototype. Pasted text and calculations stay in this browser session; the page does not send conversation text to a backend, super intelligent tools provider, or external API. Nothing is stored on prototype servers. Use care with sensitive or personal information when pasting any conversation into a web page.</p></section>
+    <section><h3>Assumptions and limitations</h3><p>These values are illustrative scenario estimates, not measurements or claims about any named super intelligent tools company. This tool cannot recover hidden system prompts, model-specific tokenization, image, audio, or video processing, cached tokens, hardware utilization, data-centre location, or real-time energy use. Actual impacts depend on the model, infrastructure, workload, cooling, and electricity mix. Results are directional scenarios, not audited carbon accounting.</p></section>
+    <section><h3>What the results mean</h3><p>Token totals describe an approximate text-token equivalent. Energy, emissions, and water figures follow the editable assumptions in the settings panel. Changing those assumptions changes the scenario; it does not reveal a provider’s actual resource use.</p></section>
+    <section><h3>Fun fact</h3><p id="funFact">Loading carbon footprint fact…</p></section>
+  </div>
+  <p class="brandline"><a href="https://www.thecreatology.com" target="_blank" title="Super Intelligent Tools Carbon Footprint: Who Is Counting the Carbon?" rel="me">THECREATOLOGY</a> · #BuildWithAI · Count the tokens. Show the carbon. Grow something green.</p>
+</footer>
+</main>
+<script src="script.js"></script>
+</body>
+</html>

@@ -3,66 +3,204 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="description" content="Estimate the text-token, energy, carbon and water footprint of a super intelligent tools conversation with TheCreatology's private, browser-only Super Intelligent Tools Footprint Inspector.">
-<title>TheCreatology · Carbon Footprint Inspector</title>
-<link rel="stylesheet" href="style.css">
-<link rel="manifest" href="site.webmanifest">
-<link rel="icon" type="image/png" sizes="32x32" href="assets/icons/favicon-32x32.png">
-<link rel="icon" type="image/png" sizes="16x16" href="assets/icons/favicon-16x16.png">
-<link rel="apple-touch-icon" href="assets/icons/icon-192.png">
-<meta name="theme-color" content="#0b5ed6">
+<meta name="description" content="TheCreatology AI Carbon Footprint Inspector — estimate the carbon, energy, and water footprint of AI conversations. Zero-server, browser-only, ultra-low carbon.">
+<title>TheCreatology · AI Carbon Footprint Inspector</title>
+<link rel="manifest" href="inspector/site.webmanifest">
+<link rel="icon" type="image/png" sizes="32x32" href="inspector/assets/icons/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="inspector/assets/icons/favicon-16x16.png">
+<link rel="apple-touch-icon" href="inspector/assets/icons/icon-192.png">
+<meta name="theme-color" content="#101820">
+<style>
+  :root{
+    --bg:#101820;
+    --panel:#17232d;
+    --line:#2b3a46;
+    --text:#f4f6f7;
+    --dark-text: #0b1021;
+    --muted:#a6b3bd;
+    --coral:#f47d68;
+    --blue:#7fa8c2;
+    --green:#9DF6C9;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
+    background:var(--bg);
+    color:var(--text);
+    line-height:1.5;
+    min-height:100vh;
+  }
+  a{color:var(--coral);text-decoration:none}
+  a:hover{text-decoration:underline}
+  .container{max-width:1000px;margin:0 auto;padding:0 20px}
+  /* Hero */
+  .hero{
+    position:relative;
+    padding:70px 20px;
+    overflow:hidden;
+    border-radius:0 0 40px 40px;
+    background:linear-gradient(180deg,#101820 0%,#0b1021 100%);
+    color:var(--dark-text);
+  }
+  .hero svg{
+    position:absolute;top:0;left:0;width:100%;height:100%;z-index:0;opacity:0.35;pointer-events:none;
+  }
+  .hero > *{position:relative;z-index:1}
+  .hero h1{font-size:clamp(28px,5vw,56px);font-weight:800;letter-spacing:-0.02em;line-height:1.1;margin-bottom:16px}
+  .hero p{font-size:clamp(16px,2.5vw,20px);color:var(--dark-text);max-width:620px;margin-bottom:24px}
+  .hero .cta{display:inline-block;background:var(--coral);color:#15191c;padding:14px 28px;border-radius:8px;font-weight:800;font-size:16px}
+  .hero .cta:hover{background:var(--green); text-decoration:none}
+  /* Grid */
+  .grid{display:grid;grid-template-columns:1fr;gap:24px;padding:40px 20px}
+  @media(min-width:768px){.grid{grid-template-columns:1fr 1fr}}
+  /* Cards */
+  .card{
+    align-items:flex-start;
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-radius:15px;
+    padding:28px;
+    display:flex;
+    flex-direction:column;
+  }
+  .card h2{font-size:20px;margin-bottom:10px;display:flex;align-items:center;gap:10px}
+  .card h2 .tag{font-size:12px;padding:2px 8px;border-radius:4px;background:rgba(244,125,104,0.15);color:var(--coral);margin-left:auto}
+  .card p{color:var(--muted);margin:20px 0;font-size:15px}
+  .card .btn{display:inline-block;background:var(--coral);color:#15191c;padding:10px 20px;border-radius:8px;font-weight:800;text-align:center;width:fit-content}
+  .card .btn:hover{background:var(--blue); text-decoration:none}
+  .card .muted{color:var(--muted);font-size:13px;margin:20px 0 0}
+  .kicker{font-size:12px;letter-spacing:0.14em;text-transform:uppercase;color:var(--coral);font-weight:800;margin-bottom:8px;display:block}
+  /* Footer */
+  footer{border-top:1px solid var(--line);padding:32px 20px;color:var(--muted);font-size:14px;text-align:center}
+  footer a{color:var(--coral)}
+  .tagline{font-style:italic;margin-top:8px}
+</style>
 </head>
 <body>
-<main>
-<div class="sticky-top">
-  <header>
-    <div class="brand"><h1>Carbon Footprint <span>Inspector</span></h1><span class="version">v0.2</span></div>
-    <button class="gear" id="settingsToggle" type="button" aria-label="Open estimation settings" aria-expanded="false" aria-controls="settingsPanel">⚙️</button>
-  </header>
-  <section class="settings" id="settingsPanel" aria-labelledby="settingsTitle" hidden>
-    <h2 id="settingsTitle">Estimation settings</h2>
-    <label for="profile">Illustrative workload profile</label>
-    <select id="profile"><option value="0.25">Light text workload</option><option value="0.60" selected>General-purpose text workload</option><option value="1.20">Heavy reasoning / larger workload</option></select>
-    <div class="fields">
-      <div><label for="efficiency">Energy per 1K tokens (Wh)</label><input id="efficiency" type="number" min="0" step="0.01" value="0.60"></div>
-      <div><label for="grid">Grid carbon intensity (g CO₂e/kWh)</label><input id="grid" type="number" min="0" step="1" value="450"></div>
-      <div><label for="water">Water intensity (ml/kWh)</label><input id="water" type="number" min="0" step="1" value="500"></div>
-      <div><label for="pue">Data-centre PUE</label><input id="pue" type="number" min="1" step="0.01" value="1.30"></div>
-    </div>
-    <p class="hint">Editable scenario assumptions, not measurements or claims about a named AI company. Energy per 1K tokens is a simplified combined estimate for this prototype.</p>
-  </section>
-  <section class="results-bar" aria-label="Live estimated results">
-    <div class="results">
-      <div class="metric"><small>Estimated tokens</small><strong id="tokens" aria-live="polite">—</strong></div>
-      <div class="metric"><small>Estimated energy · Wh</small><strong id="energy">—</strong></div>
-      <div class="metric"><small>Estimated emissions · g CO₂e</small><strong id="carbon">—</strong></div>
-      <div class="metric"><small>Estimated water · ml</small><strong id="waterOut">—</strong></div>
-      <div class="metric"><small>Input / output split</small><span class="split-status" id="splitStatus">Not analysed</span></div>
-    </div>
-  </section>
-</div>
 
-<div class="layout">
-  <section class="panel input-panel" aria-labelledby="inputTitle">
-    <h2 id="inputTitle">Paste or type a super intelligent tools conversation</h2>
-    <textarea id="conversation" aria-label="AI conversation text" placeholder="Paste a conversation here…&#10;&#10;Optional role labels help separate input and output:&#10;User: Your prompt…&#10;Assistant: The super intelligent tools response…&#10;&#10;If no labels are found, the full text is counted as conversation text."></textarea>
-    <p class="hint">Token counts are rough estimates based on text length, not provider-reported counts. Remove personal or sensitive information before pasting.</p>
-    <div class="actions"><button class="secondary" id="clear" type="button">Clear</button><button class="secondary" id="download" type="button" disabled>Export estimate JSON</button></div>
-  </section>
-</div>
-
-<footer aria-labelledby="footerTitle">
-  <h2 id="footerTitle">About the Super Intelligent Tools Footprint Inspector</h2>
-  <div class="footer-grid">
-    <section><h3>How this estimate works</h3><p>TheCreatology Super Intelligent Tools Footprint Inspector estimates text volume with a simple character-based heuristic of roughly one token per four characters. When lines use role labels such as “User:” and “Assistant:”, it estimates input and output separately. The selected workload assumptions are applied to estimate electricity use, associated carbon dioxide equivalent emissions, and water use.</p></section>
-    <section><h3>Privacy and browser-only processing</h3><p>This is a client-only prototype. Pasted text and calculations stay in this browser session; the page does not send conversation text to a backend, super intelligent tools provider, or external API. Nothing is stored on prototype servers. Use care with sensitive or personal information when pasting any conversation into a web page.</p></section>
-    <section><h3>Assumptions and limitations</h3><p>These values are illustrative scenario estimates, not measurements or claims about any named super intelligent tools company. This tool cannot recover hidden system prompts, model-specific tokenization, image, audio, or video processing, cached tokens, hardware utilization, data-centre location, or real-time energy use. Actual impacts depend on the model, infrastructure, workload, cooling, and electricity mix. Results are directional scenarios, not audited carbon accounting.</p></section>
-    <section><h3>What the results mean</h3><p>Token totals describe an approximate text-token equivalent. Energy, emissions, and water figures follow the editable assumptions in the settings panel. Changing those assumptions changes the scenario; it does not reveal a provider’s actual resource use.</p></section>
-    <section><h3>Fun fact</h3><p id="funFact">Loading carbon footprint fact…</p></section>
+<header class="hero">
+  <img src="/inspector/assets/images/bg.png" alt="AI Carbon Footprint Inspector" style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;opacity:1;pointer-events:none">
+  <div class="container">
+    <span class="kicker">TheCreatology · #BuildWithAI</span>
+    <h1>Count the tokens.<br>Show the carbon.<br>Grow something green.</h1>
+    <p>AI Carbon Footprint Inspector — a zero-server, browser-only tool to estimate the energy, carbon, and water footprint of any AI conversation. Paste a conversation, see the impact.</p>
+    <a href="/inspector/" class="cta">Open the Inspector &rarr;</a>
   </div>
-  <p class="brandline"><a href="https://www.thecreatology.com" target="_blank" title="Super Intelligent Tools Carbon Footprint: Who Is Counting the Carbon?" rel="me">THECREATOLOGY</a> · #BuildWithAI · Count the tokens. Show the carbon. Grow something green.</p>
+</header>
+
+<div class="container">
+  <div class="grid">
+    <!-- Inspector Tool Card -->
+    <article class="card">
+      <h2><span class="tag">Web UI</span>Inspector Tool</h2>
+      <p>Paste any AI conversation into the inspector and get an instant estimate of tokens, electricity (Wh), carbon (g CO₂e), and water (ml). Everything runs 100% locally in your browser — nothing is sent to a server.</p>
+      <a href="/inspector/" class="btn">Launch Inspector &rarr;</a>
+      <p class="muted">Path: /inspector/ · No build tools · No external frameworks</p>
+    </article>
+
+    <!-- MCP Card -->
+    <article class="card">
+      <h2><span class="tag">MCP Server</span>MCP Server</h2>
+      <p>Connect any AI client (VS Code Copilot, Claude Desktop, Cursor, Windsurf) to the zero-auth stdio MCP server. Invoke <code>estimate_ai_footprint</code> directly from your editor with no authentication.</p>
+      <a href="#mcp-docs" class="btn">View MCP Docs &rarr;</a>
+      <p class="muted">Command: <code>npx -y github:akyjoe/code2zero thecreatology-carbon-footprint</code></p>
+    </article>
+  </div>
+</div>
+
+<!-- MCP Docs Section -->
+<section id="mcp-docs" style="padding:40px 20px">
+  <div class="container">
+    <h2 style="font-size:22px;margin-bottom:10px">MCP Server — Step-by-Step</h2>
+    <p style="color:var(--muted);margin-bottom:24px">Zero-auth stdio MCP server. No API keys, no backend, no build tools.</p>
+
+    <div class="card" style="margin-bottom:24px">
+      <h3 style="font-size:16px;margin-bottom:10px">Option 1 — Run via npx (no install)</h3>
+      <pre style="background:#0d151c;border:1px solid var(--line);border-radius:8px;padding:14px;overflow-x:auto;font-size:13px;line-height:1.4;margin:0 0 12px"><code>npx -y github:akyjoe/code2zero thecreatology-carbon-footprint</code></pre>
+      <p style="color:var(--muted);font-size:14px;margin:0">Downloads and runs the MCP server directly from GitHub. Works with any MCP-compatible client.</p>
+    </div>
+
+    <div class="card" style="margin-bottom:24px">
+      <h3 style="font-size:16px;margin-bottom:10px">Option 2 — Run locally from clone</h3>
+      <pre style="background:#0d151c;border:1px solid var(--line);border-radius:8px;padding:14px;overflow-x:auto;font-size:13px;line-height:1.4;margin:0 0 12px"><code>git clone https://github.com/akyjoe/Code2Zero.git
+cd Code2Zero
+npm install
+node mcp/mcp.js</code></pre>
+      <p style="color:var(--muted);font-size:14px;margin:0">The server speaks MCP over stdio — connect your AI client to it.</p>
+    </div>
+
+    <div class="card" style="margin-bottom:24px">
+      <h3 style="font-size:16px;margin-bottom:10px">Option 3 — Configure an AI client</h3>
+      <p style="color:var(--muted);font-size:14px;margin:0 0 10px">Add to your client's MCP config (e.g. <code>mcp.json</code> or <code>claude_desktop_config.json</code>):</p>
+      <pre style="background:#0d151c;border:1px solid var(--line);border-radius:8px;padding:14px;overflow-x:auto;font-size:13px;line-height:1.4;margin:0 0 12px"><code>{
+  "mcpServers": {
+    "thecreatology-carbon-footprint": {
+      "command": "npx",
+      "args": ["-y", "github:akyjoe/code2zero", "thecreatology-carbon-footprint"]
+    }
+  }
+}</code></pre>
+      <p style="color:var(--muted);font-size:14px;margin:0">Then invoke <code>estimate_ai_footprint</code> with your conversation text.</p>
+    </div>
+
+    <div class="card" style="margin-bottom:24px">
+      <h3 style="font-size:16px;margin-bottom:10px">Tool: estimate_ai_footprint</h3>
+      <table style="width:100%;border-collapse:collapse;font-size:13px">
+        <thead>
+          <tr style="text-align:left;border-bottom:1px solid var(--line)">
+            <th style="padding:8px;color:var(--muted)">Parameter</th>
+            <th style="padding:8px;color:var(--muted)">Type</th>
+            <th style="padding:8px;color:var(--muted)">Default</th>
+            <th style="padding:8px;color:var(--muted)">Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="border-bottom:1px solid var(--line)">
+            <td style="padding:8px;color:var(--text);font-family:monospace">text</td>
+            <td style="padding:8px;color:var(--muted)">string</td>
+            <td style="padding:8px;color:var(--muted)">—</td>
+            <td style="padding:8px;color:var(--muted)">AI conversation text to estimate</td>
+          </tr>
+          <tr style="border-bottom:1px solid var(--line)">
+            <td style="padding:8px;color:var(--text);font-family:monospace">charsPerToken</td>
+            <td style="padding:8px;color:var(--muted)">number</td>
+            <td style="padding:8px;color:var(--muted)">4</td>
+            <td style="padding:8px;color:var(--muted)">Characters per estimated token</td>
+          </tr>
+          <tr style="border-bottom:1px solid var(--line)">
+            <td style="padding:8px;color:var(--text);font-family:monospace">whPerToken</td>
+            <td style="padding:8px;color:var(--muted)">number</td>
+            <td style="padding:8px;color:var(--muted)">0.001</td>
+            <td style="padding:8px;color:var(--muted)">Watt-hours per token</td>
+          </tr>
+          <tr style="border-bottom:1px solid var(--line)">
+            <td style="padding:8px;color:var(--text);font-family:monospace">co2PerWh</td>
+            <td style="padding:8px;color:var(--muted)">number</td>
+            <td style="padding:8px;color:var(--muted)">0.45</td>
+            <td style="padding:8px;color:var(--muted)">g CO₂e per watt-hour</td>
+          </tr>
+          <tr>
+            <td style="padding:8px;color:var(--text);font-family:monospace">waterMlPerWh</td>
+            <td style="padding:8px;color:var(--muted)">number</td>
+            <td style="padding:8px;color:var(--muted)">2</td>
+            <td style="padding:8px;color:var(--muted)">ml water per watt-hour</td>
+          </tr>
+        </tbody>
+      </table>
+      <p style="color:var(--muted);font-size:13px;margin-top:10px">Returns: <code>{ tokens, electricity_wh, carbon_gco2e, water_ml, factors }</code></p>
+    </div>
+
+    <p class="muted" style="font-size:13px;margin-top:24px">Source: <code>mcp/mcp.js</code> · Shared logic: <code>formula.js</code> · Zero authentication · Runs entirely via stdio</p>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <p>&copy; 2026 <a href="https://www.thecreatology.com" target="_blank" rel="noopener">TheCreatology</a> · <a href="https://www.thecreatology.com/build-with-ai-carbon-footprint.html" target="_blank" rel="noopener">AI Carbon Footprint: Who Is Counting the Carbon?</a></p>
+    <p class="tagline">Count the tokens. Show the carbon. Grow something green.</p>
+  </div>
 </footer>
-</main>
-<script src="script.js"></script>
+
 </body>
 </html>

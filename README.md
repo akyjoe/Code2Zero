@@ -6,7 +6,7 @@ Open-source, low-footprint developer tools for sustainable AI and software.
 
 A lightweight, browser-based prototype to estimate the electricity, carbon, and water footprint of super intelligent tools conversations.
 
-Context: [Build With AI. But Who Is Counting the Carbon?](https://thecreatology.com)
+Context: [Build With AI. But Who Is Counting the Carbon?](https://www.thecreatology.com)
 
 ### Features
 - Paste super intelligent tools chats to estimate token usage (character heuristic)
@@ -41,5 +41,5 @@ The internet’s carbon footprint is roughly on par with the global airline indu
 
 ---
 
-An open initiative by [TheCreatology](https://thecreatology.com) under `#BuildWithAI`.  
+An open initiative by [TheCreatology](https://www.thecreatology.com) under `#BuildWithAI`.  
 Count the tokens. Show the carbon. Grow something green.
