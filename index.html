@@ -3,177 +3,66 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>TheCreatology · AI Footprint Inspector</title>
-<style>
-:root{--bg:#101820;--panel:#17232d;--line:#2b3a46;--text:#f4f6f7;--muted:#a6b3bd;--coral:#f47d68;--blue:#7fa8c2;--green:#a8c7a0}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:15px/1.5 Inter,system-ui,-apple-system,Segoe UI,sans-serif}
-main{max-width:1040px;margin:0 auto;padding:36px 22px 60px}
-header{display:flex;justify-content:space-between;gap:20px;align-items:flex-start;margin-bottom:28px}
-.kicker{color:var(--coral);font-size:11px;letter-spacing:.16em;text-transform:uppercase;font-weight:800}
-h1{font-size:clamp(30px,5vw,48px);line-height:1.02;letter-spacing:-.04em;margin:8px 0}
-h1 span{color:var(--coral)}.intro{color:var(--muted);max-width:650px;margin:10px 0 0}
-.pill{border:1px solid var(--line);border-radius:99px;padding:7px 11px;color:var(--green);font-size:12px;white-space:nowrap}
-.notice{border:1px solid #715447;background:#2a211e;color:#f1c2b7;border-radius:12px;padding:12px 14px;margin:22px 0;font-size:13px}
-.layout{display:grid;grid-template-columns:1.25fr .75fr;gap:18px}
-.panel{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:18px}
-.panel h2{font-size:14px;letter-spacing:.02em;margin:0 0 14px}
-textarea{width:100%;min-height:310px;resize:vertical;background:#0d151c;border:1px solid var(--line);border-radius:10px;padding:14px;color:var(--text);font:13px/1.6 ui-monospace,SFMono-Regular,Consolas,monospace;outline:none}
-textarea:focus,input:focus,select:focus{border-color:var(--coral)}
-.hint{font-size:12px;color:var(--muted);margin:8px 0 14px}
-label{display:block;font-size:12px;color:var(--muted);margin:12px 0 6px}
-input,select{width:100%;background:#0d151c;color:var(--text);border:1px solid var(--line);border-radius:8px;padding:10px;font:inherit}
-.fields{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-button{border:0;border-radius:9px;padding:11px 16px;background:var(--coral);color:#15191c;font-weight:800;cursor:pointer}
-button.secondary{background:transparent;border:1px solid var(--line);color:var(--text)}
-.actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:12px}
-.results{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.metric{background:#0d151c;border:1px solid var(--line);border-radius:11px;padding:13px}
-.metric small{display:block;color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.08em}
-.metric strong{display:block;font-size:25px;line-height:1.2;margin-top:6px;font-variant-numeric:tabular-nums}
-.metric em{font-style:normal;color:var(--muted);font-size:11px}
-.full{grid-column:1/-1}
-.details{margin-top:14px;border-top:1px solid var(--line);padding-top:12px;color:var(--muted);font-size:12px}
-.details div{display:flex;justify-content:space-between;gap:12px;padding:4px 0}
-.details b{color:var(--text);font-weight:600;text-align:right}
-footer{margin-top:20px;color:var(--muted);font-size:12px}
-@media(max-width:760px){header{display:block}.pill{display:inline-block;margin-top:12px}.layout{grid-template-columns:1fr}.fields{grid-template-columns:1fr 1fr}}
-@media(max-width:420px){.fields{grid-template-columns:1fr}.results{grid-template-columns:1fr 1fr}.panel{padding:14px}}
-</style>
+<meta name="description" content="Estimate the text-token, energy, carbon and water footprint of a super intelligent tools conversation with TheCreatology's private, browser-only Super Intelligent Tools Footprint Inspector.">
+<title>TheCreatology · Carbon Footprint Inspector</title>
+<link rel="stylesheet" href="style.css">
+<link rel="manifest" href="site.webmanifest">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/icons/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="assets/icons/favicon-16x16.png">
+<link rel="apple-touch-icon" href="assets/icons/icon-192.png">
+<meta name="theme-color" content="#0b5ed6">
 </head>
 <body>
 <main>
-<header>
-  <div>
-    <div class="kicker">TheCreatology · Experimental tool</div>
-    <h1>AI FOOTPRINT <span>INSPECTOR</span></h1>
-    <p class="intro">Paste an AI conversation to estimate its text volume and explore what its computing footprint could look like.</p>
-  </div>
-  <div class="pill">PROTOTYPE · v0.1</div>
-</header>
-
-<div class="notice"><strong>Privacy first:</strong> This is a prototype. Your pasted text is processed entirely in this browser. Nothing is sent to or stored on our backend servers. The page does not call an AI provider or external API.</div>
+<div class="sticky-top">
+  <header>
+    <div class="brand"><h1>Carbon Footprint <span>Inspector</span></h1><span class="version">v0.2</span></div>
+    <button class="gear" id="settingsToggle" type="button" aria-label="Open estimation settings" aria-expanded="false" aria-controls="settingsPanel">⚙️</button>
+  </header>
+  <section class="settings" id="settingsPanel" aria-labelledby="settingsTitle" hidden>
+    <h2 id="settingsTitle">Estimation settings</h2>
+    <label for="profile">Illustrative workload profile</label>
+    <select id="profile"><option value="0.25">Light text workload</option><option value="0.60" selected>General-purpose text workload</option><option value="1.20">Heavy reasoning / larger workload</option></select>
+    <div class="fields">
+      <div><label for="efficiency">Energy per 1K tokens (Wh)</label><input id="efficiency" type="number" min="0" step="0.01" value="0.60"></div>
+      <div><label for="grid">Grid carbon intensity (g CO₂e/kWh)</label><input id="grid" type="number" min="0" step="1" value="450"></div>
+      <div><label for="water">Water intensity (ml/kWh)</label><input id="water" type="number" min="0" step="1" value="500"></div>
+      <div><label for="pue">Data-centre PUE</label><input id="pue" type="number" min="1" step="0.01" value="1.30"></div>
+    </div>
+    <p class="hint">Editable scenario assumptions, not measurements or claims about a named AI company. Energy per 1K tokens is a simplified combined estimate for this prototype.</p>
+  </section>
+  <section class="results-bar" aria-label="Live estimated results">
+    <div class="results">
+      <div class="metric"><small>Estimated tokens</small><strong id="tokens" aria-live="polite">—</strong></div>
+      <div class="metric"><small>Estimated energy · Wh</small><strong id="energy">—</strong></div>
+      <div class="metric"><small>Estimated emissions · g CO₂e</small><strong id="carbon">—</strong></div>
+      <div class="metric"><small>Estimated water · ml</small><strong id="waterOut">—</strong></div>
+      <div class="metric"><small>Input / output split</small><span class="split-status" id="splitStatus">Not analysed</span></div>
+    </div>
+  </section>
+</div>
 
 <div class="layout">
-<section class="panel">
-  <h2>01 / Paste conversation</h2>
-  <textarea id="conversation" placeholder="Paste a conversation here…
-
-Optional role labels help separate input and output:
-User: Your prompt…
-Assistant: The AI response…
-
-If no labels are found, the full text is counted as conversation text."></textarea>
-  <p class="hint">Token counts are rough estimates based on text length—not provider-reported token counts. Remove personal or sensitive information before pasting.</p>
-  <div class="actions">
-    <button id="analyse">Estimate footprint</button>
-    <button class="secondary" id="clear">Clear</button>
-  </div>
-</section>
-
-<aside class="panel">
-  <h2>02 / Estimation assumptions</h2>
-  <label for="profile">Illustrative workload profile</label>
-  <select id="profile">
-    <option value="0.25">Light text workload</option>
-    <option value="0.60" selected>General-purpose text workload</option>
-    <option value="1.20">Heavy reasoning / larger workload</option>
-  </select>
-  <div class="fields">
-    <div><label for="efficiency">Energy per 1K tokens (Wh)</label><input id="efficiency" type="number" min="0" step="0.01" value="0.60"></div>
-    <div><label for="grid">Grid carbon intensity (g CO₂e/kWh)</label><input id="grid" type="number" min="0" step="1" value="450"></div>
-    <div><label for="water">Water intensity (ml/kWh)</label><input id="water" type="number" min="0" step="1" value="500"></div>
-    <div><label for="pue">Data-centre PUE</label><input id="pue" type="number" min="1" step="0.01" value="1.30"></div>
-  </div>
-  <p class="hint">These are editable scenario assumptions, not measurements or claims about any named AI company. Energy per 1K tokens is a simplified combined estimate for this prototype.</p>
-</aside>
-
-<section class="panel">
-  <h2>03 / Estimated results</h2>
-  <div class="results">
-    <div class="metric"><small>Estimated tokens</small><strong id="tokens">—</strong><em>Approximate text-token equivalent</em></div>
-    <div class="metric"><small>Estimated energy</small><strong id="energy">—</strong><em>Wh, including PUE assumption</em></div>
-    <div class="metric"><small>Estimated emissions</small><strong id="carbon">—</strong><em>g CO₂e, based on selected grid</em></div>
-    <div class="metric"><small>Estimated water</small><strong id="waterOut">—</strong><em>ml, scenario estimate</em></div>
-    <div class="metric full"><small>Text split (when role labels are detected)</small>
-      <div class="details" style="border:0;padding-top:5px;margin-top:0">
-        <div><span>User / input</span><b id="inputTokens">—</b></div>
-        <div><span>Assistant / output</span><b id="outputTokens">—</b></div>
-        <div><span>Split detection</span><b id="splitStatus">Not analysed</b></div>
-      </div>
-    </div>
-  </div>
-  <div class="actions">
-    <button class="secondary" id="download" disabled>Export estimate JSON</button>
-  </div>
-</section>
-
-<section class="panel">
-  <h2>04 / What this estimate means</h2>
-  <p class="hint" style="font-size:13px;line-height:1.65;margin:0">This prototype estimates token volume from pasted text using a simple character-based heuristic. It cannot recover hidden system prompts, model-specific tokenization, image/audio/video processing, cached tokens, hardware utilization, data-centre location or real-time energy use. Actual emissions depend on the model, infrastructure, workload and electricity mix. Results are directional scenarios—not audited carbon accounting.</p>
-  <div class="details">
-    <div><span>Processing</span><b>Browser only</b></div>
-    <div><span>Backend upload</span><b>None</b></div>
-    <div><span>Provider connection</span><b>None</b></div>
-  </div>
-</section>
+  <section class="panel input-panel" aria-labelledby="inputTitle">
+    <h2 id="inputTitle">Paste or type a super intelligent tools conversation</h2>
+    <textarea id="conversation" aria-label="AI conversation text" placeholder="Paste a conversation here…&#10;&#10;Optional role labels help separate input and output:&#10;User: Your prompt…&#10;Assistant: The super intelligent tools response…&#10;&#10;If no labels are found, the full text is counted as conversation text."></textarea>
+    <p class="hint">Token counts are rough estimates based on text length, not provider-reported counts. Remove personal or sensitive information before pasting.</p>
+    <div class="actions"><button class="secondary" id="clear" type="button">Clear</button><button class="secondary" id="download" type="button" disabled>Export estimate JSON</button></div>
+  </section>
 </div>
-<footer>THECREATOLOGY · #BuildWithAI · Count the tokens. Show the carbon. Grow something green.</footer>
+
+<footer aria-labelledby="footerTitle">
+  <h2 id="footerTitle">About the Super Intelligent Tools Footprint Inspector</h2>
+  <div class="footer-grid">
+    <section><h3>How this estimate works</h3><p>TheCreatology Super Intelligent Tools Footprint Inspector estimates text volume with a simple character-based heuristic of roughly one token per four characters. When lines use role labels such as “User:” and “Assistant:”, it estimates input and output separately. The selected workload assumptions are applied to estimate electricity use, associated carbon dioxide equivalent emissions, and water use.</p></section>
+    <section><h3>Privacy and browser-only processing</h3><p>This is a client-only prototype. Pasted text and calculations stay in this browser session; the page does not send conversation text to a backend, super intelligent tools provider, or external API. Nothing is stored on prototype servers. Use care with sensitive or personal information when pasting any conversation into a web page.</p></section>
+    <section><h3>Assumptions and limitations</h3><p>These values are illustrative scenario estimates, not measurements or claims about any named super intelligent tools company. This tool cannot recover hidden system prompts, model-specific tokenization, image, audio, or video processing, cached tokens, hardware utilization, data-centre location, or real-time energy use. Actual impacts depend on the model, infrastructure, workload, cooling, and electricity mix. Results are directional scenarios, not audited carbon accounting.</p></section>
+    <section><h3>What the results mean</h3><p>Token totals describe an approximate text-token equivalent. Energy, emissions, and water figures follow the editable assumptions in the settings panel. Changing those assumptions changes the scenario; it does not reveal a provider’s actual resource use.</p></section>
+    <section><h3>Fun fact</h3><p id="funFact">Loading carbon footprint fact…</p></section>
+  </div>
+  <p class="brandline"><a href="https://www.thecreatology.com" target="_blank" title="Super Intelligent Tools Carbon Footprint: Who Is Counting the Carbon?" rel="me">THECREATOLOGY</a> · #BuildWithAI · Count the tokens. Show the carbon. Grow something green.</p>
+</footer>
 </main>
-<script>
-const $ = id => document.getElementById(id);
-let latest = null;
-const fmt = (n, digits=2) => Number(n).toLocaleString(undefined,{maximumFractionDigits:digits});
-function estimateTokens(text){
-  // Deliberately simple heuristic: roughly one token per four characters.
-  // Not a tokenizer and not reliable for every language or model.
-  return text.trim() ? Math.ceil(text.length / 4) : 0;
-}
-function analyse(){
-  const text = $('conversation').value;
-  if(!text.trim()){ alert('Paste a conversation first.'); return; }
-  const lines = text.split(/\r?\n/);
-  let userText = [], assistantText = [], hasRoles = false, current = null, otherText = [];
-  for(const line of lines){
-    const match = line.match(/^\s*(user|you|human|assistant|claude|chatgpt|gemini|model)\s*:\s*(.*)$/i);
-    if(match){
-      hasRoles = true;
-      const role = match[1].toLowerCase();
-      current = ['user','you','human'].includes(role) ? 'user' : 'assistant';
-      (current === 'user' ? userText : assistantText).push(match[2]);
-    } else if(current === 'user') userText.push(line);
-    else if(current === 'assistant') assistantText.push(line);
-    else otherText.push(line);
-  }
-  let inputTokens, outputTokens, totalTokens;
-  if(hasRoles){
-    inputTokens = estimateTokens(userText.join('\n') + (otherText.length ? '\n'+otherText.join('\n') : ''));
-    outputTokens = estimateTokens(assistantText.join('\n'));
-    totalTokens = inputTokens + outputTokens;
-  } else {
-    totalTokens = estimateTokens(text);
-    inputTokens = 0; outputTokens = 0;
-  }
-  const rate = Math.max(0, Number($('efficiency').value) || 0);
-  const grid = Math.max(0, Number($('grid').value) || 0);
-  const waterRate = Math.max(0, Number($('water').value) || 0);
-  const pue = Math.max(1, Number($('pue').value) || 1);
-  const energy = totalTokens / 1000 * rate * pue;
-  const carbon = energy * grid / 1000;
-  const water = energy * waterRate / 1000;
-  $('tokens').textContent = fmt(totalTokens,0);
-  $('energy').textContent = fmt(energy,4);
-  $('carbon').textContent = fmt(carbon,4);
-  $('waterOut').textContent = fmt(water,4);
-  $('inputTokens').textContent = hasRoles ? fmt(inputTokens,0) : 'Not separated';
-  $('outputTokens').textContent = hasRoles ? fmt(outputTokens,0) : 'Not separated';
-  $('splitStatus').textContent = hasRoles ? 'Role labels detected' : 'No role labels detected';
-  latest = {prototype:true, token_estimation:'characters / 4 heuristic', estimated_tokens:totalTokens, estimated_input_tokens:hasRoles?inputTokens:null, estimated_output_tokens:hasRoles?outputTokens:null, energy_wh:energy, emissions_g_co2e:carbon, water_ml:water, assumptions:{energy_wh_per_1000_tokens:rate, grid_intensity_g_co2e_per_kwh:grid, water_ml_per_kwh:waterRate, pue}, limitations:'Scenario estimate only; not provider telemetry or audited measurement.'};
-  $('download').disabled = false;
-}
-$('analyse').addEventListener('click',analyse);
-$('clear').addEventListener('click',()=>{$('conversation').value='';['tokens','energy','carbon','waterOut','inputTokens','outputTokens'].forEach(id=>$(id).textContent='—');$('splitStatus').textContent='Not analysed';$('download').disabled=true;latest=null;});
-$('profile').addEventListener('change',e=>{$('efficiency').value=e.target.value;});
-$('download').addEventListener('click',()=>{if(!latest)return;const blob=new Blob([JSON.stringify(latest,null,2)],{type:'application/json'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='thecreatology-ai-footprint-estimate.json';a.click();URL.revokeObjectURL(url);});
-</script>
+<script src="script.js"></script>
 </body>
 </html>

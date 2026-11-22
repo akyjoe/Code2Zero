@@ -2,14 +2,14 @@
 
 Open-source, low-footprint developer tools for sustainable AI and software.
 
-## AI Footprint Inspector (v0.1)
+## Super Intelligent Tools Footprint Inspector (v0.2)
 
-A lightweight, browser-based prototype to estimate the electricity, carbon, and water footprint of AI conversations.
+A lightweight, browser-based prototype to estimate the electricity, carbon, and water footprint of super intelligent tools conversations.
 
 Context: [Build With AI. But Who Is Counting the Carbon?](https://thecreatology.com)
 
 ### Features
-- Paste AI chats to estimate token usage (character heuristic)
+- Paste super intelligent tools chats to estimate token usage (character heuristic)
 - Auto-detect `User` and `Assistant` roles
 - Estimate electricity (`Wh`), carbon (`g CO2e`), and water (`ml`)
 - Adjust environmental assumptions
@@ -35,6 +35,9 @@ Context: [Build With AI. But Who Is Counting the Carbon?](https://thecreatology.
 - Provider usage-log imports
 - Documented benchmark presets
 - Lightweight CLI and in-chat reporting tools
+
+### Fun fact
+The internet’s carbon footprint is roughly on par with the global airline industry — and every super intelligent tools conversation adds to it. That’s why we count the tokens and show the carbon.
 
 ---
 
