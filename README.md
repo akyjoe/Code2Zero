@@ -31,10 +31,10 @@ Context: [Build With AI. But Who Is Counting the Carbon?](https://www.thecreatol
 - Real impact varies by model, workload, cooling, and power grid
 
 ### Roadmap
+- Lightweight CLI and in-chat reporting tools
 - Model-specific tokenizers
 - Provider usage-log imports
 - Documented benchmark presets
-- Lightweight CLI and in-chat reporting tools
 
 ### Fun fact
 The internet’s carbon footprint is roughly on par with the global airline industry — and every super intelligent tools conversation adds to it. That’s why we count the tokens and show the carbon.
