@@ -52,23 +52,30 @@
 
     <div class="card" style="margin-bottom:24px">
       <h3 style="font-size:16px;margin-bottom:10px">Option 1 — Run via npx (no install)</h3>
-      <pre style="background:#0d151c;border:1px solid var(--line);border-radius:8px;padding:14px;overflow-x:auto;font-size:13px;line-height:1.4;margin:0 0 12px"><code>npx -y github:akyjoe/code2zero thecreatology-carbon-footprint</code></pre>
+      <div class="code-block">
+        <pre style="background:#0d151c;border:1px solid var(--line);border-radius:8px;padding:14px;overflow-x:auto;font-size:13px;line-height:1.4;margin:0"><code>npx -y github:akyjoe/code2zero thecreatology-carbon-footprint</code></pre>
+        <button class="copy-btn" title="Copy to clipboard" aria-label="Copy code"><svg class="copy-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="13" height="13" x="9" y="9" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button>
+      </div>
       <p style="color:var(--muted);font-size:14px;margin:0">Downloads and runs the MCP server directly from GitHub. Works with any MCP-compatible client.</p>
     </div>
 
     <div class="card" style="margin-bottom:24px">
       <h3 style="font-size:16px;margin-bottom:10px">Option 2 — Run locally from clone</h3>
-      <pre style="background:#0d151c;border:1px solid var(--line);border-radius:8px;padding:14px;overflow-x:auto;font-size:13px;line-height:1.4;margin:0 0 12px"><code>git clone https://github.com/akyjoe/Code2Zero.git
+      <div class="code-block">
+        <pre style="background:#0d151c;border:1px solid var(--line);border-radius:8px;padding:14px;overflow-x:auto;font-size:13px;line-height:1.4;margin:0"><code>git clone https://github.com/akyjoe/Code2Zero.git
 cd Code2Zero
 npm install
 node mcp/mcp.js</code></pre>
+        <button class="copy-btn" title="Copy to clipboard" aria-label="Copy code"><svg class="copy-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="13" height="13" x="9" y="9" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button>
+      </div>
       <p style="color:var(--muted);font-size:14px;margin:0">The server speaks MCP over stdio — connect your AI client to it.</p>
     </div>
 
     <div class="card" style="margin-bottom:24px">
       <h3 style="font-size:16px;margin-bottom:10px">Option 3 — Configure an AI client</h3>
-      <p style="color:var(--muted);font-size:14px;margin:0 0 10px">Add to your client's MCP config (e.g. <code>mcp.json</code> or <code>claude_desktop_config.json</code>):</p>
-      <pre style="background:#0d151c;border:1px solid var(--line);border-radius:8px;padding:14px;overflow-x:auto;font-size:13px;line-height:1.4;margin:0 0 12px"><code>{
+      <p style="color:var(--muted);font-size:14px;margin:0 0 10px">Transport: <b>stdio</b> · Auth: <b>none (zero-auth)</b> · Add to your client's MCP config:</p>
+      <div class="code-block">
+        <pre style="background:#0d151c;border:1px solid var(--line);border-radius:8px;padding:14px;overflow-x:auto;font-size:13px;line-height:1.4;margin:0"><code>{
   "mcpServers": {
     "thecreatology-carbon-footprint": {
       "command": "npx",
@@ -76,7 +83,51 @@ node mcp/mcp.js</code></pre>
     }
   }
 }</code></pre>
+        <button class="copy-btn" title="Copy to clipboard" aria-label="Copy code"><svg class="copy-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="13" height="13" x="9" y="9" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button>
+      </div>
+      <p style="color:var(--muted);font-size:14px;margin:0 0 8px">For a local clone, use <code>node</code> directly instead of <code>npx</code>:</p>
+      <div class="code-block">
+        <pre style="background:#0d151c;border:1px solid var(--line);border-radius:8px;padding:14px;overflow-x:auto;font-size:13px;line-height:1.4;margin:0"><code>{
+  "mcpServers": {
+    "thecreatology-carbon-footprint": {
+      "command": "node",
+      "args": ["/absolute/path/to/Code2Zero/mcp/mcp.js"]
+    }
+  }
+}</code></pre>
+        <button class="copy-btn" title="Copy to clipboard" aria-label="Copy code"><svg class="copy-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="13" height="13" x="9" y="9" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button>
+      </div>
       <p style="color:var(--muted);font-size:14px;margin:0">Then invoke <code>estimate_ai_footprint</code> with your conversation text.</p>
+    </div>
+
+    <div class="card" style="margin-bottom:24px">
+      <h3 style="font-size:16px;margin-bottom:10px">Example tool call</h3>
+      <pre style="background:#0d151c;border:1px solid var(--line);border-radius:8px;padding:14px;overflow-x:auto;font-size:13px;line-height:1.4;margin:0 0 12px"><code>{
+  "jsonrpc": "2.0",
+  "id": 1,
+  "method": "tools/call",
+  "params": {
+    "name": "estimate_ai_footprint",
+    "arguments": {
+      "text": "User: hello\nAssistant: hi there",
+      "charsPerToken": 4,
+      "whPerToken": 0.001,
+      "co2PerWh": 0.45,
+      "waterMlPerWh": 2
+    }
+  }
+}</code></pre>
+      <p style="color:var(--muted);font-size:14px;margin:0">Returns <code>{ tokens, electricity_wh, carbon_gco2e, water_ml, factors }</code>.</p>
+    </div>
+
+    <div class="card" style="margin-bottom:24px">
+      <h3 style="font-size:16px;margin-bottom:10px">Troubleshooting</h3>
+      <ul style="color:var(--muted);font-size:13px;margin:0;padding-left:18px">
+        <li><b>Server won't start:</b> ensure Node.js ≥ 18 is installed and <code>node_modules</code> is present (<code>npm install</code>).</li>
+        <li><b>Connection refused:</b> verify <code>command</code> and <code>args</code> in your client config match one of the examples above.</li>
+        <li><b>Tool call fails:</b> <code>text</code> is required — all other parameters are optional.</li>
+        <li><b>npx fetch fails:</b> use the local <code>node</code> config if you're offline or behind a proxy.</li>
+      </ul>
     </div>
 
     <div class="card" style="margin-bottom:24px">
@@ -138,6 +189,17 @@ node mcp/mcp.js</code></pre>
     <p class="tagline">Count the tokens. Show the carbon. Grow something green.</p>
   </div>
 </footer>
+
+<script>
+    document.querySelectorAll('.copy-btn').forEach(function(btn){
+      btn.addEventListener('click', function(){
+        var pre = btn.closest('.code-block').querySelector('pre code');
+        var text = pre ? pre.textContent : '';
+        navigator.clipboard.writeText(text).then(function(){
+        });
+      });
+    });
+</script>
 
 </body>
 </html>

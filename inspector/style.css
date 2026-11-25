@@ -40,3 +40,9 @@ a:hover{text-decoration:underline}
 footer{border-top:1px solid var(--line);padding:32px 20px;color:var(--muted);font-size:14px;text-align:center}
 footer a{color:var(--coral)}
 .tagline{font-style:italic;margin-top:8px}
+/* Copy buttons for MCP docs code blocks */
+.code-block{display:flex;flex-direction:column;position:relative;max-width:100%;overflow:hidden;margin:0 0 14px;gap:6px}
+.code-block pre{margin:0;max-width:100%}
+.copy-btn{position:relative;display:inline-flex;align-items:center;gap:6px;background:var(--line);color:var(--text);border:1px solid var(--line);border-radius:6px;padding:6px 10px;font-size:11px;cursor:pointer;opacity:0.85;margin-top:8px}
+.copy-btn:hover{opacity:1;background:var(--coral);color:#15191c}
+.copy-icon{width:13px;height:13px}
